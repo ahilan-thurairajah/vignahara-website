@@ -1,3 +1,45 @@
+@font-face {
+  font-family: 'Century Gothic';
+  src: url('/fonts/Century Gothic/GOTHIC.TTF') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Century Gothic';
+  src: url('/fonts/Century Gothic/GOTHICB.TTF') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Century Gothic';
+  src: url('/fonts/Century Gothic/GOTHICBI.TTF') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Century Gothic';
+  src: url('/fonts/Century Gothic/GOTHICI.TTF') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'DM Sans';
+  src: url('/fonts/DM_Sans/DMSans-VariableFont_opsz,wght.ttf') format('truetype');
+  font-weight: 100 1000;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'DM Sans';
+  src: url('/fonts/DM_Sans/DMSans-Italic-VariableFont_opsz,wght.ttf') format('truetype');
+  font-weight: 100 1000;
+  font-style: italic;
+}
+
 .counter {
   font-size: 16px;
   padding: 5px 10px;
@@ -190,7 +232,7 @@
 }
 
 .main-logo:hover {
-  filter: drop-shadow(0 0 2em #aa3bffaa);
+  filter: drop-shadow(0 0 2em rgba(245, 158, 11, 0.67));
 }
 
 /* Embla Carousel Styles */
@@ -393,4 +435,94 @@
 
 .submit-button:hover {
   opacity: 0.9;
+}
+
+/* Site Header / Navigation */
+.site-header {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  text-decoration: none;
+}
+
+.brand-logo {
+  height: 64px;
+  width: 64px;
+  object-fit: contain;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.1;
+}
+
+.brand-name {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--primary);
+}
+
+.brand-tagline {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--primary);
+  margin-top: 0.15rem;
+}
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+  flex-wrap: wrap;
+}
+
+.main-nav a {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.main-nav a:hover {
+  color: var(--secondary);
+}
+
+.main-nav a.active {
+  color: var(--secondary);
+}
+
+@media (max-width: 1024px) {
+  .header-inner {
+    justify-content: center;
+    text-align: center;
+  }
+  .main-nav {
+    justify-content: center;
+  }
+  .brand-name {
+    font-size: 1.6rem;
+  }
 }
