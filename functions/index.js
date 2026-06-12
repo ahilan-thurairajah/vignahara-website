@@ -25,6 +25,7 @@ exports.submitInquiry = onCall({
   }
 
   try {
+    // 1. Save inquiry to database
     const docRef = await db.collection("inquiries").add({
       ...data,
       createdAt: new Date(),
@@ -32,6 +33,26 @@ exports.submitInquiry = onCall({
     });
 
     logger.info("New inquiry received", { id: docRef.id });
+
+    // 2. Trigger email notification via Firebase Extension
+    await db.collection("mail").add({
+      to: "ahilan@vignahara.com",
+      message: {
+        subject: `New Inquiry from ${data.name} (${data.type || "General"})`,
+        html: `
+          <h2>New Website Inquiry</h2>
+          <p><strong>Name:</strong> ${data.name}</p>
+          <p><strong>Email:</strong> ${data.email}</p>
+          <p><strong>Type:</strong> ${data.type || "General"}</p>
+          <p><strong>Message:</strong></p>
+          <p>${data.message}</p>
+          <hr>
+          <p><small>Inquiry ID: ${docRef.id}</small></p>
+        `
+      }
+    });
+
+    logger.info("Email notification queued");
 
     return { success: true, id: docRef.id };
   } catch (error) {
