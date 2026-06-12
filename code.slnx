@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/documents/">
+    <File Path="documents/overview.md" />
+  </Folder>
+  <Folder Name="/images/" />
+  <Folder Name="/images/logo/">
+    <File Path="images/logo/vignahara_logo.png" />
+    <File Path="images/logo/vignahara_logo_full.png" />
+    <File Path="images/logo/vignahara_logo_image.png" />
+    <File Path="images/logo/vignahara_logo_image_icon.png" />
+    <File Path="images/logo/vignahara_logo_image_small.png" />
+  </Folder>
+</Solution>
