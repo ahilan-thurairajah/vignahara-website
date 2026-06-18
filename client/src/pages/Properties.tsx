@@ -3,16 +3,31 @@ import { collection, getDocs } from 'firebase/firestore'
 import { db } from '../firebase'
 import { PropertyCard } from '../components/PropertyCard'
 
+interface Property {
+	id: string;
+	name: string;
+	location: string;
+	description: string;
+	units?: number;
+	address?: string;
+	city?: string;
+	state?: string;
+	zip?: string;
+	amenities?: string[];
+	images?: string[];
+	monthlyRent?: number;
+}
+
 function Properties() {
-  const [properties, setProperties] = useState<any[]>([]);
+	const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
 	const fetchProperties = async () => {
 	  try {
 		const querySnapshot = await getDocs(collection(db, "properties"));
-		const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-		setProperties(data);
+		const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...(doc.data() as Omit<Property, 'id'>) }));
+		setProperties(data as Property[]);
 	  } catch (error) {
 		console.error("Error fetching properties:", error);
 	  } finally {

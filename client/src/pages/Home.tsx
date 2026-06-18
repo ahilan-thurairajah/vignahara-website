@@ -1,15 +1,8 @@
-import vignaharaLogo from '../assets/logo/vignahara_logo.png'
 import { HeroSlideshow } from '../components/HeroSlideshow'
 
 function Home() {
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1rem' }}>
-      <section id="center" style={{ paddingTop: '2rem' }}>
-        <div className="hero">
-          <img src={vignaharaLogo} className="logo main-logo" alt="Vignahara logo" />
-        </div>
-      </section>
-      
+    <div className="container">
       <HeroSlideshow />
 
       <section style={{ textAlign: 'center', padding: '2rem 0' }}>

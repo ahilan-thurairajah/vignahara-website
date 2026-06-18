@@ -40,15 +40,28 @@
 }
 
 #root {
-  width: 1126px;
-  max-width: 100%;
+  max-width: 1126px;
+  width: 100%;
   margin: 0 auto;
+  padding: 0 1rem; /* fluid horizontal padding to prevent overflow */
   text-align: center;
   border-inline: 1px solid var(--border);
   min-height: 100svh;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+}
+
+/* Reusable page container for consistent fluid layout */
+.container {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 1rem;
+  box-sizing: border-box;
+}
+@media (min-width: 1280px) {
+  .container { padding: 0 2rem; }
 }
 
 body {
@@ -62,23 +75,18 @@ h2 {
   color: var(--text-h);
 }
 
+/* Fluid headings scale using clamp to remain readable on small devices */
 h1 {
-  font-size: 56px;
+  font-size: clamp(1.8rem, 4.5vw, 3.5rem);
   letter-spacing: -1.68px;
   margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
 }
+
 h2 {
-  font-size: 24px;
-  line-height: 118%;
+  font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+  line-height: 1.18;
   letter-spacing: -0.24px;
   margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
 }
 p {
   margin: 0;

@@ -1,6 +1,7 @@
 import useEmblaCarousel from 'embla-carousel-react'
 import Autoplay from 'embla-carousel-autoplay'
 import '../App.css'
+import vignaharaLogo from '../assets/logo/vignahara_logo.png'
 
 interface SlideProps {
   title: string;
@@ -31,6 +32,10 @@ export function HeroSlideshow() {
       <div className="embla__container">
         {slides.map((slide, index) => (
           <div className="embla__slide" key={index}>
+            {/* Show logo only on first slide */}
+            {index === 0 && (
+              <img src={vignaharaLogo} className="slide-logo main-logo" alt="Vignahara logo" />
+            )}
             <div className="slide-content">
               <h1>{slide.title}</h1>
               <p>{slide.description}</p>
