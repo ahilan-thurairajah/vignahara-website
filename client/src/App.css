@@ -276,6 +276,22 @@
   margin: 0 auto;
 }
 
+/* Mobile: stack the image above the title */
+@media (max-width: 480px) {
+  .embla__slide {
+    flex-direction: column;
+    padding: 2rem 1rem;
+  }
+
+  .slide-content h1 {
+    font-size: 1.6rem;
+  }
+
+  .slide-logo {
+    height: 80px;
+  }
+}
+
 /* Property Card Styles */
 .property-grid {
   display: grid;
