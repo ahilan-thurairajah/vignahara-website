@@ -237,11 +237,18 @@
 
 /* Embla Carousel Styles */
 .embla {
-  overflow: hidden;
-  background: var(--accent-bg);
+  position: relative;
+  background: var(--primary);
+  color: var(--secondary);
   border-radius: 12px;
+  border-color: black;
   margin: 2rem 0;
   border: 1px solid var(--accent-border);
+}
+
+.embla__viewport {
+  overflow: hidden;
+  border-radius: 12px;
 }
 
 .embla__container {
@@ -249,19 +256,56 @@
 }
 
 .embla__slide {
+  position: relative;
   flex: 0 0 100%;
   min-width: 0;
-  padding: 4rem 2rem;
+  min-height: 300px;
+  /* extra bottom padding reserves room for the overlaid nav controls so the
+     content stays optically centered in the visible area above them */
+  padding: 4rem 2rem 10rem;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
+  /* per-slide background image; landscape by default, swapped in portrait */
+  background-image: var(--bg-landscape, none);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* In portrait layouts, prefer the portrait image and fall back to landscape */
+@media (orientation: portrait) {
+  .embla__slide {
+    background-image: var(--bg-portrait, var(--bg-landscape, none));
+  }
+}
+
+/* Readability overlay, only when a background image is set on the slide */
+.embla__slide[style*="--bg-landscape"]::before,
+.embla__slide[style*="--bg-portrait"]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.25) 60%);
+  pointer-events: none;
+}
+
+/* Keep slide content above the overlay */
+.embla__slide > .slide-logo,
+.embla__slide > .slide-content {
+  position: relative;
+  z-index: 1;
 }
 
 .slide-content h1 {
-  font-size: 2.0rem;
-  margin-bottom: 1rem;
-  color: var(--text-h);
+  font-family: var(--brand, 'Century Gothic', 'DM Sans', serif);
+  font-size: clamp(28px, 4vw, 44px);
+  margin-bottom: 0.5rem;
+  color: #ffffff;
+  letter-spacing: 0.01em;
+  line-height: 1.05;
+  font-weight: 700;
 }
 
 /* Logo shown in first slide */
@@ -271,16 +315,133 @@
 }
 
 .slide-content p {
-  font-size: 1.25rem;
-  max-width: 600px;
-  margin: 0 auto;
+  font-size: clamp(14px, 2vw, 18px);
+  max-width: 640px;
+  margin: 0 auto 0.75rem;
+  color: rgba(255,255,255,0.95);
+  line-height: 1.35;
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.cta {
+  text-decoration: none;
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: 1px solid transparent;
+}
+
+.cta.primary {
+  background: var(--secondary);
+  color: #fff;
+}
+
+.cta.secondary {
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+/* Navigation controls: arrows + dots, overlaid near the bottom */
+.embla__controls {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  pointer-events: none; /* let clicks pass through gaps to the slide */
+}
+
+.embla__arrow,
+.embla__dot {
+  pointer-events: auto; /* re-enable on the actual controls */
+}
+
+.embla__arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border: 1px solid var(--accent-border);
+  border-radius: 50%;
+  background: var(--bg);
+  color: var(--text-h);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+
+.embla__arrow:hover {
+  background: var(--accent);
+  color: #fff;
+  transform: scale(1.05);
+}
+
+.embla__arrow:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.embla__arrow svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.embla__dots {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.embla__dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.35;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.embla__dot:hover {
+  opacity: 0.6;
+}
+
+.embla__dot--selected {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+.embla__dot:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 /* Mobile: stack the image above the title */
 @media (max-width: 480px) {
   .embla__slide {
     flex-direction: column;
-    padding: 2rem 1rem;
+    justify-content: center; /* vertically center content */
+    padding: 2.5rem 1rem 5.5rem; /* extra bottom padding clears the controls */
+    min-height: 380px;
   }
 
   .slide-content h1 {
@@ -290,7 +451,27 @@
   .slide-logo {
     height: 80px;
   }
+
+  .embla__arrow {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .hero-ctas { flex-direction: column; width: 100%; gap: 0.5rem; }
+  .hero-ctas .cta { display: block; width: 100%; text-align: center; }
 }
+
+/* Small trust row under hero */
+.trust-row {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  margin: 0.75rem 0 1.25rem;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+.trust-item { background: rgba(0,0,0,0.03); padding: 0.5rem 0.75rem; border-radius: 8px; }
 
 /* Property Card Styles */
 .property-grid {
@@ -338,6 +519,151 @@
   margin-top: 1rem;
   font-size: 0.9rem;
   color: var(--text);
+}
+
+/* Value proposition grid (stakeholder business case) */
+.value-section {
+  padding: 4rem 0;
+  text-align: center;
+}
+
+.value-heading {
+  font-size: clamp(1.6rem, 1.2rem + 1.8vw, 2rem);
+  color: var(--text-h);
+  max-width: 800px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.2;
+}
+
+.value-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.value-card {
+  padding: 2rem 1.75rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg);
+  text-align: left;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.value-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow);
+}
+
+.value-card__tag {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-bg);
+  padding: 0.25rem 0.75rem;
+  border-radius: 100px;
+  margin-bottom: 1rem;
+}
+
+.value-card h3 {
+  font-size: clamp(1.1rem, 1rem + 0.4vw, 1.3rem);
+  color: var(--text-h);
+  margin: 0 0 0.75rem;
+  font-weight: 500;
+}
+
+.value-card p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text);
+  margin: 0;
+}
+
+/* Tablet: 2 columns */
+@media (max-width: 1024px) {
+  .value-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile: single stacked column */
+@media (max-width: 640px) {
+  .value-section {
+    padding: 2.5rem 0;
+  }
+  .value-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  .value-card {
+    padding: 1.5rem 1.25rem;
+  }
+}
+
+/* Pillars of Transformation (social + environmental impact) */
+.pillars-section {
+  padding: 5rem 0;
+  text-align: center;
+  border-top: 1px solid var(--border);
+}
+
+.pillars-heading {
+  font-size: clamp(1.6rem, 1.2rem + 1.8vw, 2.4rem);
+  color: var(--text-h);
+  max-width: 800px;
+  margin: 0 auto 3rem;
+  line-height: 1.2;
+}
+
+.pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2.5rem;
+}
+
+.pillar-card {
+  padding: 2.5rem 2rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg);
+  text-align: left;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.pillar-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow);
+}
+
+.pillar-card h3 {
+  font-size: clamp(1.2rem, 1rem + 0.6vw, 1.5rem);
+  color: var(--text-h);
+  margin: 0 0 1rem;
+  font-weight: 500;
+}
+
+.pillar-card p {
+  font-size: clamp(0.95rem, 0.9rem + 0.2vw, 1.05rem);
+  line-height: 1.7;
+  color: var(--text);
+  margin: 0;
+}
+
+/* Mobile: single stacked column */
+@media (max-width: 768px) {
+  .pillars-section {
+    padding: 3rem 0;
+  }
+  .pillars-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .pillar-card {
+    padding: 1.75rem 1.5rem;
+  }
 }
 
 /* Project Showcase Styles */
@@ -465,15 +791,16 @@
   .main-nav.open { max-height: 420px; }
   .main-nav a { display: block; padding: 12px 16px; border-bottom: 1px solid var(--border); text-align: left; }
   /* Keep brand name visible; hide only the tagline on small screens */
-  .header-tagline { display: none; }
-}
+  .header-tagline {
+     display: inline; 
+     text-align: left;   }
+  }
 
 /* Component stacking/smaller viewport adjustments */
 @media (max-width: 768px) {
   .property-grid { grid-template-columns: 1fr; padding: 1rem 0; gap: 1rem; }
   .property-card { padding: 1rem; }
   .project-content { padding: 1.25rem; }
-  .embla__slide { padding: 2rem 1rem; }
   .slide-content p { font-size: 1rem; max-width: 100%; }
   .project-highlights ul { grid-template-columns: 1fr; }
 }
@@ -526,7 +853,7 @@
 .header-inner {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 1rem 1.5rem;
+  padding: 1rem 0rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -542,8 +869,8 @@
 }
 
 .brand-logo {
-  height: 64px;
-  width: 64px;
+  height: 100px;
+  width: 100px;
   object-fit: contain;
 }
 
@@ -555,18 +882,18 @@
 }
 
 .brand-name {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 2rem;
-  font-weight: 800;
+  font-family: var(--brand);
+  font-size: 3rem;
+  font-weight: 400;
   letter-spacing: 0.04em;
   color: var(--primary);
 }
 
 .brand-tagline {
-  font-size: 0.7rem;
+  font-size: 1rem;
   font-weight: 600;
-  letter-spacing: 0.12em;
-  color: var(--primary);
+  letter-spacing: 0.15em;
+  color: var(--secondary);
   margin-top: 0.15rem;
 }
 
@@ -603,7 +930,46 @@
     justify-content: center;
   }
   .brand-name {
-    font-size: 1.6rem;
-  }  
+    font-size: 1.9rem;
+  }
+  
+  .brand-tagline {
+    font-size: 0.5rem;
+  }
+
+  .brand-logo {
+  height: 64px;
+  width: 64px;
+  object-fit: contain;
+}
+}
+
+/* Phone header: brand on the left, action icons (hamburger + future profile) on the right */
+@media (max-width: 768px) {
+  .header-inner {
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    text-align: left;
+    gap: 0.75rem;
+  }
+
+  .brand {
+    flex: 0 1 auto;
+    min-width: 0; /* let long brand text shrink instead of pushing the toggle to a new line */
+  }
+
+  /* Groups the right-side action buttons; add a profile button next to .nav-toggle later */
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 0 0 auto;
+    margin-left: auto;
+  }
+
+  .nav-toggle {
+    flex: 0 0 auto;
+    margin-left: auto; /* pin to the far right when it is the only action */
+  }
 }
 

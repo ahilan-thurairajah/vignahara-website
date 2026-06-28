@@ -22,6 +22,7 @@
 
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
   --heading: 'Century Gothic', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --brand: 'Marcellus', 'Century Gothic', Georgia, serif;
   --mono: ui-monospace, Consolas, monospace;
 
   font: 18px/145% var(--sans);

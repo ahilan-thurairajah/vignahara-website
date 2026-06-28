@@ -11,8 +11,8 @@ export function Header() {
         <Link to="/" className="brand">
           <img src={logoEmblem} className="brand-logo" alt="Vignahara emblem" />
           <span className="brand-text">
-            <span className="brand-name">VIGNAHARA</span>
-            <span className="brand-tagline header-tagline">PROPTECH | CONSERVATION | COMMUNITY</span>
+            <span className="brand-name">Vignahara</span>
+            <span className="brand-tagline header-tagline">Building Sustainable Communities</span>
           </span>
         </Link>
 
